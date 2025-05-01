@@ -6,9 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.usertype.UserType;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Entity(name="fly")
 @NoArgsConstructor
@@ -30,6 +32,16 @@ public class FlyEntity implements Serializable {
     private String originName;
     @Enumerated(EnumType.STRING)
     private AeroLine aeroLine;
+    //Relacion de tickets
+    /*Un vuelo tiene muchos tickets y como ya colocamos el joinColumn ya no es necesario
+    * colocarlo aqui, pero es necesario indicar que ya está mapeado*/
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            orphanRemoval = true,
+            mappedBy = "fly"
+    )
+    private Set<TicketEntity> f;
 
 
 
