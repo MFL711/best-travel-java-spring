@@ -1,12 +1,9 @@
 package com.PortaMauricio.best_travel.domain.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.Set;
 
 @Entity(name = "customer")
 @NoArgsConstructor
@@ -16,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class CustomerEntity {
 
     @Id
-    private String id;
+    private String dni;
     //Column limita el tamaño del string
     @Column(length = 50)
     private String fullName;
@@ -27,6 +24,37 @@ public class CustomerEntity {
     private Integer totalFlights;
     private Integer totalLodgings;
     private Integer totalTours;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            orphanRemoval = true,
+            mappedBy = "customer"
+    )
+    private Set<TicketEntity> tickets;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            orphanRemoval = true,
+            mappedBy = "customer"
+    )
+    private Set<ReservationEntity> reservation;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            orphanRemoval = true,
+            mappedBy = "customer"
+    )
+    private Set<TourEntity> tour;
+
 
 
 

@@ -31,4 +31,12 @@ public class TicketEntity implements Serializable {
     //Especifica la columna de unión entre las dos tablas.
     private FlyEntity fly;
 
+    @ManyToOne
+    @JoinColumn(name = "tour_id")
+    private TourEntity tour;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private CustomerEntity customer;
+
 }

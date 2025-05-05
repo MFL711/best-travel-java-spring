@@ -2,10 +2,7 @@ package com.PortaMauricio.best_travel.domain.entities;
 
 import com.PortaMauricio.best_travel.util.AeroLine;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.usertype.UserType;
 
 import java.io.Serializable;
@@ -35,13 +32,17 @@ public class FlyEntity implements Serializable {
     //Relacion de tickets
     /*Un vuelo tiene muchos tickets y como ya colocamos el joinColumn ya no es necesario
     * colocarlo aqui, pero es necesario indicar que ya está mapeado*/
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             orphanRemoval = true,
             mappedBy = "fly"
     )
-    private Set<TicketEntity> f;
+    private Set<TicketEntity> tickets;
+
 
 
 
