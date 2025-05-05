@@ -2,7 +2,6 @@ package com.PortaMauricio.best_travel;
 
 import com.PortaMauricio.best_travel.domain.repositories.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -61,7 +60,17 @@ public class BestTravelApplication implements CommandLineRunner {
 		/*Probando join de ticket*/
 		//Buscando el vuelo pasasndo como parametro el id del ticket
 
-		var fly = flyRepository.findByTicketId(UUID.fromString("22345678-1234-5678-3235-567812345678")).get();
-		System.out.println(fly);
+//		var fly = flyRepository.findByTicketId(UUID.fromString("22345678-1234-5678-3235-567812345678")).get();
+//		System.out.println(fly);
+
+		/*Probando consultas con palabras clave de JPA*/
+		hotelRepository.findByPriceLessThan(BigDecimal.valueOf(100)).forEach(System.out::println);
+
+		hotelRepository.findByPriceBetween(BigDecimal.valueOf(50), BigDecimal.valueOf(100)).forEach(System.out::println);
+
+		hotelRepository.findByRatingGreaterThan(3).forEach(System.out::println);
+
+		var hotel = hotelRepository.findByReservationId(UUID.fromString("32345678-1234-5678-1234-567812345678"));
+		System.out.println("hotel = " + hotel);
 	}
 }
