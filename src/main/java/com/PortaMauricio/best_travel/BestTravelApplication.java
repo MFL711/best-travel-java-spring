@@ -87,7 +87,7 @@ public class BestTravelApplication implements CommandLineRunner {
 		log.info("fly: " + fly.getOriginName() +" - " + fly.getDestinyName());
 
 		var tour = TourEntity.builder() //Crea un objeto de la clase tour entity
-			.customer(customer)
+				.customer(customer)
 				.build();
 
 		var ticket = TicketEntity.builder()
@@ -115,8 +115,14 @@ public class BestTravelApplication implements CommandLineRunner {
 
 		System.out.println("Guardando tour\n");
 
-		this.tourRepository.save(tour);
+		tour.addReservation(reservation);
+		tour.updateReservations();
+		tour.addTicket(ticket);
+		tour.updateTicket();
 
+		var tourSaved = this.tourRepository.save(tour);
+
+		this.tourRepository.deleteById(tourSaved.getId());
 
 
 
