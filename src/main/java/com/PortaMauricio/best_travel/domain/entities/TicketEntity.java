@@ -24,7 +24,7 @@ public class TicketEntity implements Serializable {
     private BigDecimal price;
     private LocalDateTime departureDate;
     private LocalDateTime arrivalDate;
-    private LocalDate purchaseDate;
+    private LocalDateTime purchaseDate;
     //Muchos tickets pertenecen a un vuelo
     @ManyToOne
     @JoinColumn (name = "fly_id") /*Es el nombre que tiene el atributo

@@ -14,6 +14,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Transactional
@@ -34,9 +36,21 @@ public class TicketService implements ITicketService {
     public TicketResponse Create(TicketRequest request) {
         /*Para crear un ticket necesitamos un fly y un customer*/
         var fly = flyRepository.findById(request.getIdFly()).orElseThrow();
+        var customer = customerRepository.findById(request.getIdCliente()).orElseThrow();
+        var ticketToPersist = TicketEntity.builder()
+                .id(UUID.randomUUID())
+                .fly(fly)
+                .customer(customer)
+                .price(fly.getPrice().multiply(BigDecimal.valueOf(0.25)))
+                .arrivalDate(LocalDateTime.now())
+                .departureDate(LocalDateTime.now())
+                .purchaseDate(LocalDateTime.now())
+                .build();
+        var ticketSaved = this.ticketRepository.save(ticketToPersist);
 
-
-        return null;
+        /*Es como un printf donde colocas variables en la impresion*/
+        log.info("Ticket saved with id: {}", ticketSaved.getId());
+        return this.entityToResponse(ticketSaved);
     }
 
     @Override
