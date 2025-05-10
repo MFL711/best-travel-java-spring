@@ -40,7 +40,7 @@ public class BestTravelApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
 		SpringApplication.run(BestTravelApplication.class, args);
-		
+
 
 
 	}
@@ -78,51 +78,55 @@ public class BestTravelApplication implements CommandLineRunner {
 //		var hotel = hotelRepository.findByReservationId(UUID.fromString("32345678-1234-5678-1234-567812345678"));
 //		System.out.println("hotel = " + hotel);
 
-		var customer = customerRepository.findById("BBMB771012HMCRR022").orElseThrow();
-		var fly = flyRepository.findById(11L).orElseThrow();
-		var hotel = hotelRepository.findById(3L).orElseThrow();
+		/*Esto sirvio para hacer pruebas al termiar de colocar todas las entidades, las consultas SQL, las diferentes
+		* relaciones que existian entre los datos. Se creo un customer, un fly y un hotel para poder crear un tour y
+		* después se eliminó*/
 
-		log.info("Nombre del cliente: " + customer.getFullName());
-		log.info("Hotle: " + hotel.getName());
-		log.info("fly: " + fly.getOriginName() +" - " + fly.getDestinyName());
-
-		var tour = TourEntity.builder() //Crea un objeto de la clase tour entity
-				.customer(customer)
-				.build();
-
-		var ticket = TicketEntity.builder()
-				.id(UUID.randomUUID())
-				.price(fly.getPrice().multiply(BigDecimal.TEN))
-				.arrivalDate(LocalDate.now())
-				.departureDate(LocalDate.now())
-				.purchaseDate(LocalDate.now())
-				.customer(customer)
-				.tour(tour)
-				.fly(fly)
-				.build();
-
-		var reservation = ReservationEntity.builder()
-				.id(UUID.randomUUID())
-				.dateTimeReservation(LocalDateTime.now())
-				.dateEnd(LocalDate.now().plusDays(3))
-				.dateStart(LocalDate.now().plusDays(1))
-				.hotel(hotel)
-				.customer(customer)
-				.tour(tour)
-				.totalDays(3)
-				.price(hotel.getPrice().multiply(BigDecimal.TEN))
-				.build();
-
-		System.out.println("Guardando tour\n");
-
-		tour.addReservation(reservation);
-		tour.updateReservations();
-		tour.addTicket(ticket);
-		tour.updateTicket();
-
-		var tourSaved = this.tourRepository.save(tour);
-
-		this.tourRepository.deleteById(tourSaved.getId());
+//		var customer = customerRepository.findById("BBMB771012HMCRR022").orElseThrow();
+//		var fly = flyRepository.findById(11L).orElseThrow();
+//		var hotel = hotelRepository.findById(3L).orElseThrow();
+//
+//		log.info("Nombre del cliente: " + customer.getFullName());
+//		log.info("Hotle: " + hotel.getName());
+//		log.info("fly: " + fly.getOriginName() +" - " + fly.getDestinyName());
+//
+//		var tour = TourEntity.builder() //Crea un objeto de la clase tour entity
+//				.customer(customer)
+//				.build();
+//
+//		var ticket = TicketEntity.builder()
+//				.id(UUID.randomUUID())
+//				.price(fly.getPrice().multiply(BigDecimal.TEN))
+//				.arrivalDate(LocalDateTime.now())
+//				.departureDate(LocalDateTime.now())
+//				.purchaseDate(LocalDateTime.now())
+//				.customer(customer)
+//				.tour(tour)
+//				.fly(fly)
+//				.build();
+//
+//		var reservation = ReservationEntity.builder()
+//				.id(UUID.randomUUID())
+//				.dateTimeReservation(LocalDateTime.now())
+//				.dateEnd(LocalDate.now().plusDays(3))
+//				.dateStart(LocalDate.now().plusDays(1))
+//				.hotel(hotel)
+//				.customer(customer)
+//				.tour(tour)
+//				.totalDays(3)
+//				.price(hotel.getPrice().multiply(BigDecimal.TEN))
+//				.build();
+//
+//		System.out.println("Guardando tour\n");
+//
+//		tour.addReservation(reservation);
+//		tour.updateReservations();
+//		tour.addTicket(ticket);
+//		tour.updateTicket();
+//
+//		var tourSaved = this.tourRepository.save(tour);
+//
+//		this.tourRepository.deleteById(tourSaved.getId());
 
 
 
