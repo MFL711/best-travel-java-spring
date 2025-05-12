@@ -25,17 +25,17 @@ public class TicketEntity implements Serializable {
     private LocalDateTime arrivalDate;
     private LocalDateTime purchaseDate;
     //Muchos tickets pertenecen a un vuelo
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "fly_id") /*Es el nombre que tiene el atributo
     en la tabla de ticket*/
     //Especifica la columna de unión entre las dos tablas.
     private FlyEntity fly; //
 
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "tour_id")
     private TourEntity tour;
 
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private CustomerEntity customer;
 

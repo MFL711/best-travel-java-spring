@@ -9,6 +9,7 @@ import com.PortaMauricio.best_travel.domain.repositories.FlyRepository;
 import com.PortaMauricio.best_travel.domain.repositories.TicketRepository;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.ITicketService;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -54,18 +55,28 @@ public class TicketService implements ITicketService {
     }
 
     @Override
-    public TicketResponse Read(UUID uuid) {
-        return null;
+    public TicketResponse Read(UUID id) {
+        var ticketFromDB = this.ticketRepository.findById(id).orElseThrow();
+        return this.entityToResponse(ticketFromDB);
     }
 
     @Override
-    public TicketResponse Update(TicketRequest request, UUID uuid) {
-        return null;
+    public TicketResponse Update(TicketRequest request, UUID id){
+        var fly = flyRepository.findById(request.getIdFly()).orElseThrow();
+        var ticketToUpdate = ticketRepository.findById(id).orElseThrow();
+        ticketToUpdate.setFly(fly);
+        ticketToUpdate.setPrice(BigDecimal.valueOf(0.25));
+        ticketToUpdate.setArrivalDate(LocalDateTime.now());
+        ticketToUpdate.setDepartureDate(LocalDateTime.now());
+        var ticketUpdated = this.ticketRepository.save(ticketToUpdate);
+        log.info("Ticket updated with id {}", ticketUpdated.getId());
+        return this.entityToResponse(ticketUpdated);
     }
 
     @Override
-    public TicketResponse Delete(UUID uuid) {
-        return null;
+    public void Delete(UUID id) {
+        var ticketToDelete = ticketRepository.findById(id).orElseThrow();
+        this.ticketRepository.delete(ticketToDelete);
     }
 
     /*Metodo para mapear los datos de Etity a Respnse*/
