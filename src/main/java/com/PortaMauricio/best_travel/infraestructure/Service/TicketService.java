@@ -8,6 +8,7 @@ import com.PortaMauricio.best_travel.domain.repositories.CustomerRepository;
 import com.PortaMauricio.best_travel.domain.repositories.FlyRepository;
 import com.PortaMauricio.best_travel.domain.repositories.TicketRepository;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.ITicketService;
+import com.PortaMauricio.best_travel.util.BestTravelUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -41,10 +43,10 @@ public class TicketService implements ITicketService {
                 .id(UUID.randomUUID())
                 .fly(fly)
                 .customer(customer)
-                .price(fly.getPrice().multiply(BigDecimal.valueOf(0.25)))
-                .arrivalDate(LocalDateTime.now())
-                .departureDate(LocalDateTime.now())
-                .purchaseDate(LocalDateTime.now())
+                .price(fly.getPrice().add(fly.getPrice().multiply(charger_price_percentage)))
+                .arrivalDate(BestTravelUtil.getArrivalHour())
+                .departureDate(BestTravelUtil.getDepartureHour())
+                .purchaseDate(LocalDate.now())
                 .build();
         var ticketSaved = this.ticketRepository.save(ticketToPersist);
 
@@ -65,8 +67,8 @@ public class TicketService implements ITicketService {
         var ticketToUpdate = ticketRepository.findById(id).orElseThrow();
         ticketToUpdate.setFly(fly);
         ticketToUpdate.setPrice(fly.getPrice().add(fly.getPrice().multiply(charger_price_percentage)));
-        ticketToUpdate.setArrivalDate(LocalDateTime.now());
-        ticketToUpdate.setDepartureDate(LocalDateTime.now());
+        ticketToUpdate.setArrivalDate(BestTravelUtil.getArrivalHour());
+        ticketToUpdate.setDepartureDate(BestTravelUtil.getDepartureHour());
         var ticketUpdated = this.ticketRepository.save(ticketToUpdate);
         log.info("Ticket updated with id {}", ticketUpdated.getId());
         return this.entityToResponse(ticketUpdated);
