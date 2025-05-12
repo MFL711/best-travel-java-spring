@@ -9,7 +9,6 @@ import com.PortaMauricio.best_travel.domain.repositories.FlyRepository;
 import com.PortaMauricio.best_travel.domain.repositories.TicketRepository;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.ITicketService;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -65,7 +64,7 @@ public class TicketService implements ITicketService {
         var fly = flyRepository.findById(request.getIdFly()).orElseThrow();
         var ticketToUpdate = ticketRepository.findById(id).orElseThrow();
         ticketToUpdate.setFly(fly);
-        ticketToUpdate.setPrice(BigDecimal.valueOf(0.25));
+        ticketToUpdate.setPrice(fly.getPrice().add(fly.getPrice().multiply(charger_price_percentage)));
         ticketToUpdate.setArrivalDate(LocalDateTime.now());
         ticketToUpdate.setDepartureDate(LocalDateTime.now());
         var ticketUpdated = this.ticketRepository.save(ticketToUpdate);
@@ -79,6 +78,12 @@ public class TicketService implements ITicketService {
         this.ticketRepository.delete(ticketToDelete);
     }
 
+    @Override
+    public BigDecimal getFlyPriceWithTax(Long flyId) {
+        var fly = this.flyRepository.findById(flyId).orElseThrow();
+        return fly.getPrice().add(fly.getPrice().multiply(charger_price_percentage));
+    }
+
     /*Metodo para mapear los datos de Etity a Respnse*/
     private TicketResponse entityToResponse (TicketEntity entity){
         var response = new TicketResponse();
@@ -90,4 +95,8 @@ public class TicketService implements ITicketService {
         response.setFly(flyResponse);
         return response;
     }
+
+    /*Cramos una constate para el impuesto de los vuelos*/
+    private static final BigDecimal charger_price_percentage = BigDecimal.valueOf(0.25);
+
 }
