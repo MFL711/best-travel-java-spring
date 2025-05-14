@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,6 +15,7 @@ import java.io.Serializable;
 @Builder
 public class ReservationRequest implements Serializable {
 
-    private String customer;
-    private Integer hotelId;
+    private String customerId;
+    private Long hotelId;
+    private Integer totalDays;
 }

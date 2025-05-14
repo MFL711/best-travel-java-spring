@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Transactional
@@ -43,7 +42,7 @@ public class TicketService implements ITicketService {
                 .id(UUID.randomUUID())
                 .fly(fly)
                 .customer(customer)
-                .price(fly.getPrice().add(fly.getPrice().multiply(charger_price_percentage)))
+                .price(fly.getPrice().add(fly.getPrice().multiply(charges_price_percentage)))
                 .arrivalDate(BestTravelUtil.getArrivalHour())
                 .departureDate(BestTravelUtil.getDepartureHour())
                 .purchaseDate(LocalDate.now())
@@ -66,7 +65,7 @@ public class TicketService implements ITicketService {
         var fly = flyRepository.findById(request.getIdFly()).orElseThrow();
         var ticketToUpdate = ticketRepository.findById(id).orElseThrow();
         ticketToUpdate.setFly(fly);
-        ticketToUpdate.setPrice(fly.getPrice().add(fly.getPrice().multiply(charger_price_percentage)));
+        ticketToUpdate.setPrice(fly.getPrice().add(fly.getPrice().multiply(charges_price_percentage)));
         ticketToUpdate.setArrivalDate(BestTravelUtil.getArrivalHour());
         ticketToUpdate.setDepartureDate(BestTravelUtil.getDepartureHour());
         var ticketUpdated = this.ticketRepository.save(ticketToUpdate);
@@ -83,7 +82,7 @@ public class TicketService implements ITicketService {
     @Override
     public BigDecimal getFlyPriceWithTax(Long flyId) {
         var fly = this.flyRepository.findById(flyId).orElseThrow();
-        return fly.getPrice().add(fly.getPrice().multiply(charger_price_percentage));
+        return fly.getPrice().add(fly.getPrice().multiply(charges_price_percentage));
     }
 
     /*Metodo para mapear los datos de Etity a Respnse*/
@@ -99,6 +98,6 @@ public class TicketService implements ITicketService {
     }
 
     /*Cramos una constate para el impuesto de los vuelos*/
-    private static final BigDecimal charger_price_percentage = BigDecimal.valueOf(0.25);
+    private static final BigDecimal charges_price_percentage = BigDecimal.valueOf(0.25);
 
 }
