@@ -1,8 +1,6 @@
 package com.PortaMauricio.best_travel.api.controllers;
 
-import com.PortaMauricio.best_travel.api.models.request.TicketRequest;
 import com.PortaMauricio.best_travel.api.models.responses.FlyResponse;
-import com.PortaMauricio.best_travel.api.models.responses.TicketResponse;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.IFlyService;
 import com.PortaMauricio.best_travel.util.SortType;
 import lombok.AllArgsConstructor;
