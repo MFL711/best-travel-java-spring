@@ -46,10 +46,10 @@ public class HotelController {
         return response.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(response);
     }
 
-    @GetMapping (path = "greater_than")
-    public ResponseEntity<Set<HotelResponse>> greaterThan (@RequestParam Integer rating){
+    @GetMapping (path = "rating")
+    public ResponseEntity<Set<HotelResponse>> readByRating (@RequestParam Integer rating){
 
-        var response = this.hotelService.readGreaterThan(rating);
+        var response = this.hotelService.readByRating(rating);
         return response.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(response);
     }
 

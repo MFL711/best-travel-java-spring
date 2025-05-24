@@ -57,7 +57,7 @@ public class HotelService implements IHotelService {
     }
     
     @Override
-    public Set<HotelResponse> readGreaterThan(Integer rating) {
+    public Set<HotelResponse> readByRating(Integer rating) {
 
         return this.hotelRepository.findByRatingGreaterThan(rating)
                 .stream()
