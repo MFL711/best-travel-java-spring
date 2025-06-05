@@ -48,7 +48,8 @@ public class HotelController {
 
     @GetMapping (path = "rating")
     public ResponseEntity<Set<HotelResponse>> readByRating (@RequestParam Integer rating){
-
+        if (rating > 4) rating = 4;
+        if (rating < 1) rating = 1;
         var response = this.hotelService.readByRating(rating);
         return response.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(response);
     }

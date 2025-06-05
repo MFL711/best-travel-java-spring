@@ -89,7 +89,7 @@ public class ReservationService implements IReservationService {
     }
 
     /*Cramos una constate para el impuesto de los vuelos*/
-    private static final BigDecimal charges_price_percentage = BigDecimal.valueOf(0.20);
+    public static final BigDecimal charges_price_percentage = BigDecimal.valueOf(0.20);
 
     @Override
     public BigDecimal getHotelTotalPrice(Long hotelId) {
