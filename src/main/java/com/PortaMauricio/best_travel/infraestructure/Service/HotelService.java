@@ -20,7 +20,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 
-@Transactional
+@Transactional (readOnly = true) //Solo permite lectura de la base de datos, no operaciones de insert o
+// delete
 @Service
 @AllArgsConstructor
 @Data

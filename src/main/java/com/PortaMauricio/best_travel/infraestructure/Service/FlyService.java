@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Transactional
+@Transactional (readOnly = true) //Solo operaciones de lectura en la base de datos
 @Service
 @AllArgsConstructor
 @Data

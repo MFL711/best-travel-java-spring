@@ -8,6 +8,7 @@ import com.PortaMauricio.best_travel.domain.repositories.CustomerRepository;
 import com.PortaMauricio.best_travel.domain.repositories.FlyRepository;
 import com.PortaMauricio.best_travel.domain.repositories.TicketRepository;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.ITicketService;
+import com.PortaMauricio.best_travel.infraestructure.helpers.CustomerHelper;
 import com.PortaMauricio.best_travel.util.BestTravelUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ public class TicketService implements ITicketService {
     private final FlyRepository flyRepository;
     private final CustomerRepository customerRepository;
     private final TicketRepository ticketRepository;
+    private final CustomerHelper customerHelper;
 
     @Override
     public TicketResponse Create(TicketRequest request) {
@@ -48,6 +50,8 @@ public class TicketService implements ITicketService {
                 .purchaseDate(LocalDate.now())
                 .build();
         var ticketSaved = this.ticketRepository.save(ticketToPersist);
+
+        this.customerHelper.increaseTourAndTicket(customer.getDni(), TicketService.class);
 
         /*Es como un printf donde colocas variables en la impresion*/
         log.info("Ticket saved with id: {}", ticketSaved.getId());
@@ -97,7 +101,7 @@ public class TicketService implements ITicketService {
         return response;
     }
 
-    /*Cramos una constate para el impuesto de los vuelos*/
+    /*Creamos una constate para el impuesto de los vuelos*/
     public static final BigDecimal charges_price_percentage = BigDecimal.valueOf(0.25);
 
 }

@@ -8,6 +8,7 @@ import com.PortaMauricio.best_travel.domain.repositories.CustomerRepository;
 import com.PortaMauricio.best_travel.domain.repositories.HotelRepository;
 import com.PortaMauricio.best_travel.domain.repositories.ReservationRepository;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.IReservationService;
+import com.PortaMauricio.best_travel.infraestructure.helpers.CustomerHelper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -28,6 +29,7 @@ public class ReservationService implements IReservationService {
     private final ReservationRepository reservationRepository;
     private final HotelRepository hotelRepository;
     private final CustomerRepository customerRepository;
+    private final CustomerHelper customerHelper;
 
 
     @Override
@@ -47,6 +49,8 @@ public class ReservationService implements IReservationService {
                 .price(hotel.getPrice().add(hotel.getPrice().multiply(charges_price_percentage)))
                 .build();
         var reservationPersisted = reservationRepository.save(reservationToPersist);
+
+        this.customerHelper.increaseTourAndTicket(customer.getDni(), ReservationService.class);
 
         return this.entityToResponse(reservationPersisted);
     }

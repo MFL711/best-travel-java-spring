@@ -5,6 +5,7 @@ import com.PortaMauricio.best_travel.api.models.responses.TourResponse;
 import com.PortaMauricio.best_travel.domain.entities.*;
 import com.PortaMauricio.best_travel.domain.repositories.*;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.ITourService;
+import com.PortaMauricio.best_travel.infraestructure.helpers.CustomerHelper;
 import com.PortaMauricio.best_travel.infraestructure.helpers.TourHelper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,8 @@ public class TourService implements ITourService {
     private final FlyRepository flyRepository;
     private final HotelRepository hotelRepository;
     private final TourHelper tourHelper;
-    private final ReservationRepository reservationRepository;
+    private final CustomerHelper customerHelper; //Para actualizer los contadores de cuantos tickets,
+    // reservaciones y tours tiene cada cliente
 
     /*No es buena practica que dentro de un service mandemos a llamar a otro service
      * para esto crearemos una clase helper*/
@@ -49,6 +51,8 @@ public class TourService implements ITourService {
                 .build();
 
         var tourSaved = this.tourRepository.save(tourToSave);
+
+        this.customerHelper.increaseTourAndTicket(customer.getDni(), TourService.class);
 
         return TourResponse.builder()
                 .reservationIds(tourSaved.getReservations().stream().map(ReservationEntity::getId).collect(
