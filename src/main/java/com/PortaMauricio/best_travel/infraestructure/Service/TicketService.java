@@ -8,6 +8,7 @@ import com.PortaMauricio.best_travel.domain.repositories.CustomerRepository;
 import com.PortaMauricio.best_travel.domain.repositories.FlyRepository;
 import com.PortaMauricio.best_travel.domain.repositories.TicketRepository;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.ITicketService;
+import com.PortaMauricio.best_travel.infraestructure.helpers.BlockListHelper;
 import com.PortaMauricio.best_travel.infraestructure.helpers.CustomerHelper;
 import com.PortaMauricio.best_travel.util.BestTravelUtil;
 import lombok.AllArgsConstructor;
@@ -34,9 +35,13 @@ public class TicketService implements ITicketService {
     private final CustomerRepository customerRepository;
     private final TicketRepository ticketRepository;
     private final CustomerHelper customerHelper;
+    private final BlockListHelper blockListHelper;
 
     @Override
     public TicketResponse Create(TicketRequest request) {
+        //Validación del cliente para realizar transacción
+        blockListHelper.isInBlockListCustomer(request.getIdCliente());
+
         /*Para crear un ticket necesitamos un fly y un customer*/
         var fly = flyRepository.findById(request.getIdFly()).orElseThrow();
         var customer = customerRepository.findById(request.getIdCliente()).orElseThrow();

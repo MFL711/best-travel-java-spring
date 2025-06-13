@@ -8,6 +8,7 @@ import com.PortaMauricio.best_travel.domain.repositories.CustomerRepository;
 import com.PortaMauricio.best_travel.domain.repositories.HotelRepository;
 import com.PortaMauricio.best_travel.domain.repositories.ReservationRepository;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.IReservationService;
+import com.PortaMauricio.best_travel.infraestructure.helpers.BlockListHelper;
 import com.PortaMauricio.best_travel.infraestructure.helpers.CustomerHelper;
 import com.PortaMauricio.best_travel.util.exceptions.IdNotFoundException;
 import lombok.AllArgsConstructor;
@@ -31,10 +32,13 @@ public class ReservationService implements IReservationService {
     private final HotelRepository hotelRepository;
     private final CustomerRepository customerRepository;
     private final CustomerHelper customerHelper;
+    private final BlockListHelper blockListHelper;
 
 
     @Override
     public ReservationResponse Create(ReservationRequest request) {
+        //Validación del cliente para realizar la transacción
+        blockListHelper.isInBlockListCustomer(request.getCustomerId());
 
         var hotel = hotelRepository.findById(request.getHotelId())
                 .orElseThrow(() -> new IdNotFoundException("hotel"));
