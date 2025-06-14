@@ -4,7 +4,7 @@ import com.PortaMauricio.best_travel.api.models.responses.FlyResponse;
 import com.PortaMauricio.best_travel.domain.entities.FlyEntity;
 import com.PortaMauricio.best_travel.domain.repositories.FlyRepository;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.IFlyService;
-import com.PortaMauricio.best_travel.util.SortType;
+import com.PortaMauricio.best_travel.util.enums.SortType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

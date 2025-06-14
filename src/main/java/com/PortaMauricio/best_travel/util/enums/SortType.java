@@ -1,4 +1,4 @@
-package com.PortaMauricio.best_travel.util;
+package com.PortaMauricio.best_travel.util.enums;
 
 public enum SortType {
 

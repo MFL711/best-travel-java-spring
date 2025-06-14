@@ -4,7 +4,7 @@ import com.PortaMauricio.best_travel.api.models.responses.HotelResponse;
 import com.PortaMauricio.best_travel.domain.entities.HotelEntity;
 import com.PortaMauricio.best_travel.domain.repositories.HotelRepository;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.IHotelService;
-import com.PortaMauricio.best_travel.util.SortType;
+import com.PortaMauricio.best_travel.util.enums.SortType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

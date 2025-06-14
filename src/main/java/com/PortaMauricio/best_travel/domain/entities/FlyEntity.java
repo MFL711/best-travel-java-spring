@@ -1,9 +1,8 @@
 package com.PortaMauricio.best_travel.domain.entities;
 
-import com.PortaMauricio.best_travel.util.AeroLine;
+import com.PortaMauricio.best_travel.util.enums.AeroLine;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.usertype.UserType;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

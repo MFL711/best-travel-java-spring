@@ -2,7 +2,7 @@ package com.PortaMauricio.best_travel.api.controllers;
 
 import com.PortaMauricio.best_travel.api.models.responses.HotelResponse;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.IHotelService;
-import com.PortaMauricio.best_travel.util.SortType;
+import com.PortaMauricio.best_travel.util.enums.SortType;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;

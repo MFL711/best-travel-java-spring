@@ -1,6 +1,6 @@
 package com.PortaMauricio.best_travel.api.models.responses;
 
-import com.PortaMauricio.best_travel.util.AeroLine;
+import com.PortaMauricio.best_travel.util.enums.AeroLine;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
