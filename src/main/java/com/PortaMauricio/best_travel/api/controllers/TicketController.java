@@ -3,6 +3,7 @@ package com.PortaMauricio.best_travel.api.controllers;
 import com.PortaMauricio.best_travel.api.models.request.TicketRequest;
 import com.PortaMauricio.best_travel.api.models.responses.TicketResponse;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.ITicketService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(path = "ticket")
 @AllArgsConstructor
+@Tag(name = "Ticket")
 public class TicketController {
 
     /*Para inyectar dependencias usamos siempre las interfaces*/

@@ -3,6 +3,7 @@ package com.PortaMauricio.best_travel.api.controllers;
 import com.PortaMauricio.best_travel.api.models.responses.HotelResponse;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.IHotelService;
 import com.PortaMauricio.best_travel.util.enums.SortType;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.Set;
 @RestController
 @RequestMapping(path = "hotel")
 @AllArgsConstructor
+@Tag(name = "Hotel")
 public class HotelController {
 
     private final IHotelService hotelService;

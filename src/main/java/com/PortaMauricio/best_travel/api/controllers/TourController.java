@@ -3,6 +3,8 @@ package com.PortaMauricio.best_travel.api.controllers;
 import com.PortaMauricio.best_travel.api.models.request.TourRequest;
 import com.PortaMauricio.best_travel.api.models.responses.TourResponse;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.ITourService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +16,13 @@ import java.util.UUID;
 @RestController
 @RequestMapping(path = "tour")
 @AllArgsConstructor
+@Tag(name = "Tour")
 public class TourController {
 
     private final ITourService tourService;
 
+    @Operation(summary = "Guardaen el sistema un tour, un tour contiene una lista vuelos y una lista de " +
+            "reservación de hotel")
     @PostMapping
     public ResponseEntity<TourResponse> post (@RequestBody TourRequest request){
         return ResponseEntity.ok(this.tourService.create(request));
