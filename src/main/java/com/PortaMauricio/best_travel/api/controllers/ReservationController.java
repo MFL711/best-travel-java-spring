@@ -4,6 +4,7 @@ import com.PortaMauricio.best_travel.api.models.request.ReservationRequest;
 import com.PortaMauricio.best_travel.api.models.responses.ErrorsResponse;
 import com.PortaMauricio.best_travel.api.models.responses.ReservationResponse;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.IReservationService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,9 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping(path = "reservation")
@@ -58,8 +57,17 @@ public class ReservationController {
         return ResponseEntity.noContent().build();
     }
 
+    //Este metodo usará la consulta de conversion de moneda con el WebClient
+    @Operation(summary = "Regresa el precio total (con impuestos) de un hotel dado el id del hotel ")
     @GetMapping
-    public ResponseEntity<Map<String, BigDecimal>> getHotelTotalPrice (@RequestParam Long hotelId){
-        return ResponseEntity.ok(Collections.singletonMap("hotelPrice", this.reservationService.getHotelTotalPrice(hotelId)));
+    public ResponseEntity<Map<String, BigDecimal>> getHotelTotalPrice (
+            // Recibe como parámetro en la URL el ID del hotel
+            @RequestParam Long hotelId,
+            // Recibe desde los headers la moneda deseada.
+            @RequestHeader (required = false) Currency currency){
+        if (Objects.isNull(currency)) currency = Currency.getInstance("USD");
+        // Devuelve una respuesta HTTP 200 OK con un JSON que contiene solo la clave "hotelPrice"
+        return ResponseEntity.ok(Collections.singletonMap("hotelPrice",
+                this.reservationService.getHotelTotalPrice(hotelId, currency)));
     }
 }

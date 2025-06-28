@@ -8,6 +8,7 @@ import com.PortaMauricio.best_travel.domain.repositories.CustomerRepository;
 import com.PortaMauricio.best_travel.domain.repositories.HotelRepository;
 import com.PortaMauricio.best_travel.domain.repositories.ReservationRepository;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.IReservationService;
+import com.PortaMauricio.best_travel.infraestructure.helpers.ApiCurrencyConectorHelper;
 import com.PortaMauricio.best_travel.infraestructure.helpers.BlockListHelper;
 import com.PortaMauricio.best_travel.infraestructure.helpers.CustomerHelper;
 import com.PortaMauricio.best_travel.util.enums.Tables;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Currency;
 import java.util.UUID;
 
 @Transactional
@@ -34,6 +36,7 @@ public class ReservationService implements IReservationService {
     private final CustomerRepository customerRepository;
     private final CustomerHelper customerHelper;
     private final BlockListHelper blockListHelper;
+    private final ApiCurrencyConectorHelper apiCurrencyConectorHelper;
 
 
     @Override
@@ -115,9 +118,20 @@ public class ReservationService implements IReservationService {
     public static final BigDecimal charges_price_percentage = BigDecimal.valueOf(0.20);
 
     @Override
-    public BigDecimal getHotelTotalPrice(Long hotelId) {
-        var hotel = hotelRepository.findById(hotelId).orElseThrow(()-> new IdNotFoundException(
-                Tables.hotel.name()));
-        return hotel.getPrice().add(hotel.getPrice().multiply(charges_price_percentage));
+    public BigDecimal getHotelTotalPrice(Long hotelId, Currency currency) {
+        // Buscar el hotel en la base de datos por su ID. Si no existe, lanza una excepción personalizada.
+        var hotel = hotelRepository.findById(hotelId)
+                .orElseThrow(() -> new IdNotFoundException(Tables.hotel.name()));
+        // Calcula el precio total en dólares, sumando al precio base un porcentaje extra (cargos adicionales).
+        var totalPriceDollars = hotel.getPrice().add(hotel.getPrice().multiply(charges_price_percentage));
+        // Si la moneda solicitada es USD, devuelve directamente el precio calculado en dólares.
+        if (currency.equals(Currency.getInstance("USD"))) return totalPriceDollars;
+        // Se hace la consulta a la api y devuelve un objeto de tipo DTO
+        var currencyDTO = this.apiCurrencyConectorHelper.getCurrency(currency);
+        // Imprime en logs la fecha de la tasa de cambio obtenida y las tasas disponibles (útil para auditoría o debug).
+        log.info("API currency {}, response: {}", currencyDTO.getExchangeDate().toString(), currencyDTO.getRates());
+        // Devuelve el precio en la moneda solicitada, multiplicando el precio en dólares por la tasa de cambio correspondiente.
+        return totalPriceDollars.multiply(currencyDTO.getRates().get(currency));
     }
 }
+

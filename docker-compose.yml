@@ -15,3 +15,5 @@ services:
       - POSTGRES_PASSWORD=adminMauro
     ports:
       - "5432:5432"
+
+

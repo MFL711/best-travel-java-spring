@@ -9,11 +9,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -21,12 +23,22 @@ import java.util.stream.Collectors;
 
 @Transactional (readOnly = true) //Solo operaciones de lectura en la base de datos
 @Service
-@AllArgsConstructor
 @Data
 @Slf4j
 public class FlyService implements IFlyService {
 
+    //Inyección de objeto de la clase FlyRepository
     private final FlyRepository flyRepository;
+    //Inyección de objeto tipo WebClient
+    private final WebClient webClient;
+
+    //Constructor necesario para inyectar y diferenciar cuál de los dos WebClient que tenemos vamos
+    // a usar
+    public FlyService (FlyRepository flyRepository, @Qualifier(value = "base") WebClient webClient){
+        this.flyRepository = flyRepository;
+        this.webClient = webClient;
+    }
+
 
     @Override
     public Set<FlyResponse> readByOriginDestiny(String origin, String destiny) {
