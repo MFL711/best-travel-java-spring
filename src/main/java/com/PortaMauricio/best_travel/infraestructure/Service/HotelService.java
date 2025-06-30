@@ -4,11 +4,13 @@ import com.PortaMauricio.best_travel.api.models.responses.HotelResponse;
 import com.PortaMauricio.best_travel.domain.entities.HotelEntity;
 import com.PortaMauricio.best_travel.domain.repositories.HotelRepository;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.IHotelService;
+import com.PortaMauricio.best_travel.util.constants.CacheConstants;
 import com.PortaMauricio.best_travel.util.enums.SortType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -42,6 +44,7 @@ public class HotelService implements IHotelService {
     }
 
     @Override
+    @Cacheable (value = CacheConstants.HOTEL_CACHE_NAME)
     public Set<HotelResponse> readLessPrice(BigDecimal price) {
         return this.hotelRepository.findByPriceLessThan(price)
                 .stream()
@@ -50,6 +53,7 @@ public class HotelService implements IHotelService {
     }
 
     @Override
+    @Cacheable (value = CacheConstants.HOTEL_CACHE_NAME)
     public Set<HotelResponse> readBetweenPrice(BigDecimal min, BigDecimal max) {
         return this.hotelRepository.findByPriceBetween(min, max)
                 .stream()
@@ -58,6 +62,7 @@ public class HotelService implements IHotelService {
     }
     
     @Override
+    @Cacheable (value = CacheConstants.HOTEL_CACHE_NAME)
     public Set<HotelResponse> readByRating(Integer rating) {
 
         return this.hotelRepository.findByRatingGreaterThan(rating)

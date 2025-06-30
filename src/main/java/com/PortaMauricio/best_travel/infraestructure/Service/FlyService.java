@@ -4,12 +4,14 @@ import com.PortaMauricio.best_travel.api.models.responses.FlyResponse;
 import com.PortaMauricio.best_travel.domain.entities.FlyEntity;
 import com.PortaMauricio.best_travel.domain.repositories.FlyRepository;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.IFlyService;
+import com.PortaMauricio.best_travel.util.constants.CacheConstants;
 import com.PortaMauricio.best_travel.util.enums.SortType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -23,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Transactional (readOnly = true) //Solo operaciones de lectura en la base de datos
 @Service
-@Data
+
 @Slf4j
 public class FlyService implements IFlyService {
 
@@ -41,6 +43,7 @@ public class FlyService implements IFlyService {
 
 
     @Override
+    @Cacheable(value = CacheConstants.FLY_CACHE_NAME)
     public Set<FlyResponse> readByOriginDestiny(String origin, String destiny) {
         return this.flyRepository.selectOriginDestiny(origin, destiny)
                 .stream()
@@ -60,6 +63,7 @@ public class FlyService implements IFlyService {
     }
 
     @Override
+    @Cacheable(value = CacheConstants.FLY_CACHE_NAME)
     public Set<FlyResponse> readLessPrice(BigDecimal price) {
         return this.flyRepository.selectLessPrice(price)
                 .stream()
@@ -68,6 +72,7 @@ public class FlyService implements IFlyService {
     }
 
     @Override
+    @Cacheable(value = CacheConstants.FLY_CACHE_NAME)
     public Set<FlyResponse> readBetweenPrice(BigDecimal min, BigDecimal max) {
         return this.flyRepository.selectBetweenPrice(min, max)
                 .stream()
