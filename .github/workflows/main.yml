@@ -2,6 +2,9 @@ name: Crear rama hotfix
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write  # Permiso necesario para crear ramas    
+
 jobs:
   crear-rama:
     runs-on: ubuntu-latest
