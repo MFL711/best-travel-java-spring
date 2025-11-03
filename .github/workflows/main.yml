@@ -1,41 +1,72 @@
-name: Validar Nombre de Rama en BestTravel
 
+
+name: Primer workflow
 on:
-  push:
-    # Solo se dispara cuando se hace un 'push' a una rama que se está creando
-    # Es decir, la rama no existía previamente en el repositorio
-    branches:
-      - '**' # Aplica a todas las ramas nuevas
-    tags:
-      - '*' # Ignora tags
-    
-jobs:
-  validate_branch_name:
-    runs-on: ubuntu-latest
-    
-    # Condición clave: solo se ejecuta si la rama NO existe en el servidor remoto
-    # Esto funciona para capturar la primera vez que se hace push a una rama
-    if: github.event_name == 'push' && github.event.ref_type == 'branch'
-    
-    steps:
-      - name: Obtener nombre de la rama
-        id: branch_name
-        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
-        
-      - name: Verificar el nombre de la rama
-        id: name_check
-        run: |
-          BRANCH_NAME="${{ steps.branch_name.outputs.branch }}"
-          echo "Verificando rama: $BRANCH_NAME"
+  workflow_dispatch:
 
-          # Definición de tus normas (ejemplo):
-          # 1. Debe empezar con "feature/", "fix/", o "hotfix/"
-          # 2. No debe contener espacios
-          if [[ $BRANCH_NAME =~ ^(feature|fix|hotfix)\/.* && ! $BRANCH_NAME =~ " " ]]; then
-            echo "El nombre de la rama '$BRANCH_NAME' cumple con las normas."
-            exit 0 # Éxito
-          else
-            echo "❌ ERROR: El nombre de la rama '$BRANCH_NAME' NO cumple con las normas."
-            echo "Debe empezar con 'feature/', 'fix/' o 'hotfix/' y no contener espacios."
-            exit 1 # Falla, denegando la creación/push
-          fi
+jobs: 
+    creando-rama:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Imprimiendo mensaje
+          run: echo "Hola, este es mi primer workflow"
+
+        - name: bajando el codigo
+          uses: actions/checkout@v4
+
+        - name: creando rama a partir de main
+          run: |
+            git checkout main
+            git pull origin main
+            git checkout -b hotfix/1.0.1
+            git push origin hotfix/1.0.1
+  
+
+
+
+
+
+
+
+
+# name: Validar Nombre de Rama en BestTravel
+
+# on:
+#   push:
+#     # Solo se dispara cuando se hace un 'push' a una rama que se está creando
+#     # Es decir, la rama no existía previamente en el repositorio
+#     branches:
+#       - '**' # Aplica a todas las ramas nuevas
+#     tags:
+#       - '*' # Ignora tags
+    
+# jobs:
+#   validate_branch_name:
+#     runs-on: ubuntu-latest
+    
+#     # Condición clave: solo se ejecuta si la rama NO existe en el servidor remoto
+#     # Esto funciona para capturar la primera vez que se hace push a una rama
+#     if: github.event_name == 'push' && github.event.ref_type == 'branch'
+    
+#     steps:
+#       - name: Obtener nombre de la rama
+#         id: branch_name
+#         run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+        
+#       - name: Verificar el nombre de la rama
+#         id: name_check
+#         run: |
+#           BRANCH_NAME="${{ steps.branch_name.outputs.branch }}"
+#           echo "Verificando rama: $BRANCH_NAME"
+
+#           # Definición de tus normas (ejemplo):
+#           # 1. Debe empezar con "feature/", "fix/", o "hotfix/"
+#           # 2. No debe contener espacios
+#           if [[ $BRANCH_NAME =~ ^(feature|fix|hotfix)\/.* && ! $BRANCH_NAME =~ " " ]]; then
+#             echo "El nombre de la rama '$BRANCH_NAME' cumple con las normas."
+#             exit 0 # Éxito
+#           else
+#             echo "❌ ERROR: El nombre de la rama '$BRANCH_NAME' NO cumple con las normas."
+#             echo "Debe empezar con 'feature/', 'fix/' o 'hotfix/' y no contener espacios."
+#             exit 1 # Falla, denegando la creación/push
+#           fi
