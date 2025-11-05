@@ -15,12 +15,6 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Instalar Git (solo en imagen micro)
-        run: |
-            echo "🔧 Instalando Git..."
-            apt-get update -y
-            apt-get install -y git
-
       - name: Configurar Bot de Git
         run: |
           git config user.name "github-actions[bot]"
