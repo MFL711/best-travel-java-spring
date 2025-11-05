@@ -1,4 +1,4 @@
-package com.PortaMauricio.best_travel.api.controllers;
+ package com.PortaMauricio.best_travel.api.controllers;
 
 import com.PortaMauricio.best_travel.api.models.responses.FlyResponse;
 import com.PortaMauricio.best_travel.infraestructure.abstract_service.IFlyService;

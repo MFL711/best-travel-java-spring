@@ -1,0 +1,51 @@
+name: Crear siguiente hotfix
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  autoincrementar-hotfix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Instalar Git (solo en imagen micro)
+        run: |
+            echo "🔧 Instalando Git..."
+            apt-get update -y
+            apt-get install -y git
+
+      - name: Configurar Bot de Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Detectar siguiente rama hotfix
+        id: next_branch
+        run: |
+          # Obtener ramas remotas que contengan 'hotfix/'
+          branches=$(git ls-remote --heads origin | grep 'hotfix/' || true)
+          if [ -z "$branches" ]; then
+            next_branch="hotfix/1.0.0"
+          else
+            last=$(echo "$branches" | awk -F'/' '{print $4}' | sort -V | tail -n1)
+            prefix=$(echo $last | cut -d'.' -f1,2)
+            patch=$(echo $last | cut -d'.' -f3)
+            next_patch=$((patch + 1))
+            next_branch="hotfix/${prefix}.${next_patch}"
+          fi
+          echo "➡️ Nueva rama a crear: $next_branch"
+          echo "branch_name=$next_branch" >> $GITHUB_OUTPUT
+
+      - name: Crear y subir rama
+        run: |
+          git checkout main
+          git pull origin main
+          git checkout -b ${{ steps.next_branch.outputs.branch_name }}
+          git push origin ${{ steps.next_branch.outputs.branch_name }}

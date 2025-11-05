@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Imprimir mensaje de inicio
+      - name: Mensaje de inicio
         run: echo "Iniciando workflow para crear rama hotfix"
 
       - name: Checkout del código
@@ -24,23 +24,22 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      # 4️⃣ Autenticarse con el token del repositorio
-      # (Reemplaza por tu token personalizado si lo usas con act)
+      # Autenticarse con el token del repositorio para ACT
       - name: Autenticar con token de GitHub
         run: |
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
 
-      # 5️⃣ Actualizar main y crear la nueva rama
+      # Actualizar main y crear la nueva rama
       - name: Crear rama hotfix
         run: |
           git checkout main
           git pull origin main
           git checkout -b hotfix/1.0.1
 
-      # 6️⃣ Subir la nueva rama al remoto
+      # Subir la nueva rama al remoto
       - name: Subir rama al remoto
         run: git push origin hotfix/1.0.1
 
-      # 7️⃣ Confirmar finalización
+      # Confirmar finalización
       - name: Mensaje de éxito
-        run: echo "✅ Rama 'hotfix/1.0.1' creada y subida correctamente."
+        run: echo "Rama 'hotfix/1.0.1' creada y subida correctamente."
